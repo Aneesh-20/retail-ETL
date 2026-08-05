@@ -13,7 +13,7 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="index.css?v=copilot_v1">
+    <link rel="stylesheet" href="index.css?v=daterange_v1">
 </head>
 <body>
     <!-- 2-Second Neobrutalist Splash Screen -->
@@ -103,10 +103,17 @@
                     <div class="filter-group">
                         <label for="date-filter"><i data-lucide="calendar" class="icon-sm"></i> Period</label>
                         <select id="date-filter">
-                            <option value="30">Last 30 Days</option>
+                            <option value="30" selected>Last 30 Days</option>
                             <option value="14">Last 14 Days</option>
                             <option value="7">Last 7 Days</option>
+                            <option value="custom">📅 Custom Range...</option>
                         </select>
+                    </div>
+                    <div id="custom-date-container" class="custom-date-group hidden">
+                        <input type="date" id="custom-start-date" class="date-input" title="Start Date">
+                        <span class="date-to">to</span>
+                        <input type="date" id="custom-end-date" class="date-input" title="End Date">
+                        <button type="button" class="btn btn-secondary btn-sm" id="apply-custom-date-btn">Apply</button>
                     </div>
                     <button class="btn btn-secondary" id="open-upload-modal-btn">
                         <i data-lucide="upload-cloud"></i> Upload Data
@@ -644,6 +651,6 @@
     </div>
 
     <!-- Custom JS -->
-    <script src="app.js?v=copilot_v1"></script>
+    <script src="app.js?v=daterange_v1"></script>
 </body>
 </html>

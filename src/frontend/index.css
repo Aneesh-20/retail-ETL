@@ -400,6 +400,40 @@ body {
     transition: all 0.1s ease;
 }
 
+.custom-date-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: 1.5px solid #475569;
+}
+
+.custom-date-group.hidden {
+    display: none !important;
+}
+
+.date-input {
+    background-color: var(--brutal-white);
+    border: var(--stroke-main);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--brutal-black);
+    outline: none;
+}
+
+.date-to {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 900;
+    color: #cbd5e1;
+    text-transform: uppercase;
+}
+
 .filter-bar select:hover, .filter-bar select:focus {
     transform: translate(-2px, -2px);
     box-shadow: 5px 5px 0px #000000;

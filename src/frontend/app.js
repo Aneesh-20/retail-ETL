@@ -5,6 +5,8 @@ const API_BASE = "http://localhost:8000/api/v1";
 let activeTab = "overview";
 let selectedChannel = "";
 let selectedPeriod = "30";
+let customStartDate = "";
+let customEndDate = "";
 
 // Currency Configuration (Base: INR ₹)
 const CURRENCIES = {
@@ -85,10 +87,42 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    const customDateContainer = document.getElementById('custom-date-container');
+    const customStartInput = document.getElementById('custom-start-date');
+    const customEndInput = document.getElementById('custom-end-date');
+    const applyCustomDateBtn = document.getElementById('apply-custom-date-btn');
+
+    // Default custom date values to last 30 days
+    const today = new Date();
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(today.getDate() - 30);
+    if (customStartInput && customEndInput) {
+        customEndInput.value = today.toISOString().split('T')[0];
+        customStartInput.value = thirtyDaysAgo.toISOString().split('T')[0];
+    }
+
     dateFilter.addEventListener('change', (e) => {
         selectedPeriod = e.target.value;
-        loadCurrentTabData();
+        if (selectedPeriod === 'custom') {
+            if (customDateContainer) customDateContainer.classList.remove('hidden');
+        } else {
+            if (customDateContainer) customDateContainer.classList.add('hidden');
+            loadCurrentTabData();
+        }
     });
+
+    if (applyCustomDateBtn) {
+        applyCustomDateBtn.addEventListener('click', () => {
+            customStartDate = customStartInput.value;
+            customEndDate = customEndInput.value;
+            if (!customStartDate || !customEndDate) {
+                showToast("Please select both Start Date and End Date.");
+                return;
+            }
+            showToast(`Applied Custom Date Range: ${customStartDate} to ${customEndDate}`);
+            loadCurrentTabData();
+        });
+    }
 
     const currencySelect = document.getElementById('currency-select');
     if (currencySelect) {
@@ -461,6 +495,13 @@ function hideModalStatus() {
     modalStatusAlert.className = "modal-alert hidden";
 }
 
+function filterTrendsByCustomDate(trends) {
+    if (selectedPeriod !== 'custom' || !customStartDate || !customEndDate) {
+        return trends || [];
+    }
+    return (trends || []).filter(t => t.date_day >= customStartDate && t.date_day <= customEndDate);
+}
+
 // RENDERERS PER TAB
 // 1. Overview Tab
 async function renderOverviewTab() {
@@ -469,9 +510,10 @@ async function renderOverviewTab() {
 
     // Draw mini line chart
     const ctxSales = document.getElementById('salesForecastChart').getContext('2d');
-    const dates = trendData.trends.map(t => t.date_day);
-    const actuals = trendData.trends.map(t => t.actual || null);
-    const forecasts = trendData.trends.map(t => t.forecast || null);
+    const filteredTrends = filterTrendsByCustomDate(trendData.trends);
+    const dates = filteredTrends.map(t => t.date_day);
+    const actuals = filteredTrends.map(t => t.actual || null);
+    const forecasts = filteredTrends.map(t => t.forecast || null);
 
     if (salesChart) salesChart.destroy();
     salesChart = new Chart(ctxSales, {
@@ -580,9 +622,10 @@ async function renderTrendsTab() {
     }
 
     const ctxSalesLarge = document.getElementById('salesTrendsChartLarge').getContext('2d');
-    const dates = trendData.trends.map(t => t.date_day);
-    const actuals = trendData.trends.map(t => t.actual || null);
-    const forecasts = trendData.trends.map(t => t.forecast || null);
+    const filteredTrends = filterTrendsByCustomDate(trendData.trends);
+    const dates = filteredTrends.map(t => t.date_day);
+    const actuals = filteredTrends.map(t => t.actual || null);
+    const forecasts = filteredTrends.map(t => t.forecast || null);
 
     if (salesChartLarge) salesChartLarge.destroy();
     salesChartLarge = new Chart(ctxSalesLarge, {
