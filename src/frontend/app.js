@@ -99,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const kpiIcon = kpiCard.querySelector('.kpi-icon');
                 if (kpiIcon) {
                     kpiIcon.setAttribute('data-lucide', CURRENCIES[currentCurrency].icon);
+                    if (window.lucide) lucide.createIcons();
                 }
             }
             const featDesc = document.querySelector('.feature-desc');
