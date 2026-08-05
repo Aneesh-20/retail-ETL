@@ -13,7 +13,7 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="index.css?v=rupee_force_v3">
+    <link rel="stylesheet" href="index.css?v=currency_v1">
 </head>
 <body>
     <!-- 2-Second Neobrutalist Splash Screen -->
@@ -90,6 +90,14 @@
                             <option value="Grocery">Grocery</option>
                             <option value="Home & Living">Home & Living</option>
                             <option value="Beauty">Beauty</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="currency-select"><i data-lucide="coins" class="icon-sm"></i> Currency</label>
+                        <select id="currency-select">
+                            <option value="INR" selected>₹ INR (Rupees)</option>
+                            <option value="USD">$ USD (Dollars)</option>
+                            <option value="EUR">€ EUR (Euros)</option>
                         </select>
                     </div>
                     <div class="filter-group">
@@ -593,6 +601,6 @@
     </div>
 
     <!-- Custom JS -->
-    <script src="app.js?v=rupee_force_v3"></script>
+    <script src="app.js?v=currency_v1"></script>
 </body>
 </html>

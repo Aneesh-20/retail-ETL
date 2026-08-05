@@ -6,6 +6,18 @@ let activeTab = "overview";
 let selectedChannel = "";
 let selectedPeriod = "30";
 
+// Currency Configuration (Base: INR ₹)
+const CURRENCIES = {
+    INR: { symbol: '₹', rate: 1.0, locale: 'en-IN', icon: 'indian-rupee' },
+    USD: { symbol: '$', rate: 0.012, locale: 'en-US', icon: 'dollar-sign' },
+    EUR: { symbol: '€', rate: 0.011, locale: 'de-DE', icon: 'euro' }
+};
+let currentCurrency = "INR";
+
+function getCurrencySymbol() {
+    return (CURRENCIES[currentCurrency] || CURRENCIES.INR).symbol;
+}
+
 // Chart instances
 let salesChart = null;
 let salesChartLarge = null;
@@ -77,6 +89,26 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedPeriod = e.target.value;
         loadCurrentTabData();
     });
+
+    const currencySelect = document.getElementById('currency-select');
+    if (currencySelect) {
+        currencySelect.addEventListener('change', (e) => {
+            currentCurrency = e.target.value;
+            const kpiCard = document.getElementById('kpi-revenue')?.closest('.kpi-card');
+            if (kpiCard) {
+                const kpiIcon = kpiCard.querySelector('.kpi-icon');
+                if (kpiIcon) {
+                    kpiIcon.setAttribute('data-lucide', CURRENCIES[currentCurrency].icon);
+                }
+            }
+            const featDesc = document.querySelector('.feature-desc');
+            if (featDesc) {
+                featDesc.innerText = `Incremental sales per ${getCurrencySymbol()}1 ad spend`;
+            }
+            showToast(`Currency Switched to ${currentCurrency} (${getCurrencySymbol()})`);
+            loadCurrentTabData();
+        });
+    }
 
     refreshBtn.addEventListener('click', async () => {
         const icon = refreshBtn.querySelector('i');
@@ -237,7 +269,7 @@ async function apiPost(endpoint, body) {
 // KPI Strip Renderer
 async function fetchKPIs() {
     const data = await apiGet("/overview");
-    document.getElementById('kpi-revenue').innerText = `₹${formatMoney(data.revenue)}`;
+    document.getElementById('kpi-revenue').innerText = `${getCurrencySymbol()}${formatMoney(data.revenue)}`;
     document.getElementById('kpi-margin').innerText = `${data.margin_pct}%`;
     document.getElementById('kpi-returns').innerText = `${data.return_rate_pct}%`;
     document.getElementById('kpi-customers').innerText = formatCount(data.active_customers);
@@ -444,7 +476,7 @@ async function renderOverviewTab() {
             labels: dates,
             datasets: [
                 {
-                    label: 'Actual Sales (₹)',
+                    label: `Actual Sales (${getCurrencySymbol()})`,
                     data: actuals,
                     borderColor: '#dc2626',
                     borderWidth: 4,
@@ -457,7 +489,7 @@ async function renderOverviewTab() {
                     pointRadius: 5
                 },
                 {
-                    label: 'Ridge Forecast (₹)',
+                    label: `Ridge Forecast (${getCurrencySymbol()})`,
                     data: forecasts,
                     borderColor: '#0f172a',
                     borderWidth: 4,
@@ -521,8 +553,8 @@ async function renderTrendsTab() {
     const trendData = await apiGet(url);
     
     // Fill metrics
-    document.getElementById('metric-mae').innerText = `₹${formatMoney(trendData.metrics.mae)}`;
-    document.getElementById('metric-rmse').innerText = `₹${formatMoney(trendData.metrics.rmse)}`;
+    document.getElementById('metric-mae').innerText = `${getCurrencySymbol()}${formatMoney(trendData.metrics.mae)}`;
+    document.getElementById('metric-rmse').innerText = `${getCurrencySymbol()}${formatMoney(trendData.metrics.rmse)}`;
     document.getElementById('metric-wape').innerText = `${trendData.metrics.wape}%`;
 
     // Render Feature Impact Weights
@@ -555,7 +587,7 @@ async function renderTrendsTab() {
             labels: dates,
             datasets: [
                 {
-                    label: 'Actual Revenue (₹)',
+                    label: `Actual Revenue (${getCurrencySymbol()})`,
                     data: actuals,
                     borderColor: '#dc2626',
                     borderWidth: 4,
@@ -568,7 +600,7 @@ async function renderTrendsTab() {
                     pointRadius: 6
                 },
                 {
-                    label: 'Ridge Multi-Forecast (₹)',
+                    label: `Ridge Multi-Forecast (${getCurrencySymbol()})`,
                     data: forecasts,
                     borderColor: '#ff2a85',
                     borderWidth: 4,
@@ -741,7 +773,7 @@ async function renderFraudTab() {
             <td><strong>${item.transaction_id}</strong></td>
             <td>${item.customer_id}</td>
             <td>${formatDate(item.transaction_timestamp)}</td>
-            <td>₹${formatMoney(item.net_sales)}</td>
+            <td>${getCurrencySymbol()}${formatMoney(item.net_sales)}</td>
             <td><strong>${item.fraud_score}</strong>/100</td>
             <td><span class="badge ${badgeClass}">${item.risk_tier}</span></td>
             <td><ul style="padding-left: 14px; font-size: 11px;">${factorList}</ul></td>
