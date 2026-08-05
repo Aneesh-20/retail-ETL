@@ -2,9 +2,9 @@ name: Retail Lakehouse Platform CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, Aneesh ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, master, Aneesh ]
 
 jobs:
   test:

@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 
 # Add project root to path
-PROJECT_ROOT = "/Users/aneeshnaren/.gemini/antigravity-ide/scratch/retail_lakehouse"
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(PROJECT_ROOT)
 
 class TestRetailLakehousePlatform(unittest.TestCase):
