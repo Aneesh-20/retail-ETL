@@ -78,8 +78,12 @@ document.addEventListener("DOMContentLoaded", () => {
         loadCurrentTabData();
     });
 
-    refreshBtn.addEventListener('click', () => {
-        loadCurrentTabData(true);
+    refreshBtn.addEventListener('click', async () => {
+        const icon = refreshBtn.querySelector('i');
+        if (icon) icon.classList.add('spin-anim');
+        await loadCurrentTabData(true);
+        if (icon) icon.classList.remove('spin-anim');
+        showToast("System Refreshed Successfully! Lakehouse analytics updated.");
     });
 
     // Setup Exports
@@ -851,12 +855,12 @@ function downloadCSV(filename, csvContent) {
 // Utility formatting helpers
 function formatMoney(val) {
     if (val === undefined || val === null) return "0.00";
-    return Number(val).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return Number(val).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function formatCount(val) {
     if (val === undefined || val === null) return "0";
-    return Number(val).toLocaleString();
+    return Number(val).toLocaleString('en-IN');
 }
 
 function formatDate(val) {
@@ -881,4 +885,17 @@ function showError(msg) {
 
 function hideError() {
     errorBanner.classList.add('hidden');
+}
+
+function showToast(msg = "System Refreshed Successfully! Lakehouse analytics updated.") {
+    const toast = document.getElementById('toast-notification');
+    const toastMsg = document.getElementById('toast-message');
+    if (toast && toastMsg) {
+        toastMsg.innerText = msg;
+        toast.classList.remove('hidden');
+        if (window.lucide) lucide.createIcons();
+        setTimeout(() => {
+            toast.classList.add('hidden');
+        }, 3200);
+    }
 }
