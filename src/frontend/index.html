@@ -13,7 +13,7 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="index.css?v=banknote_fix">
+    <link rel="stylesheet" href="index.css?v=copilot_v1">
 </head>
 <body>
     <!-- 2-Second Neobrutalist Splash Screen -->
@@ -600,7 +600,50 @@
         <span id="toast-message">System Refreshed Successfully! Lakehouse analytics updated.</span>
     </div>
 
+    <!-- AI Retail Copilot Floating Button & Chat Drawer -->
+    <button id="copilot-fab-btn" class="copilot-fab">
+        <i data-lucide="bot" class="copilot-fab-icon"></i>
+        <span>AI Copilot</span>
+        <span class="copilot-badge">Live</span>
+    </button>
+
+    <div id="copilot-drawer" class="copilot-drawer hidden">
+        <div class="copilot-header">
+            <div class="copilot-title-box">
+                <i data-lucide="bot" class="copilot-header-icon"></i>
+                <div>
+                    <h4>AI Retail Copilot</h4>
+                    <span class="copilot-status"><span class="status-dot"></span> Lakehouse Intelligence Active</span>
+                </div>
+            </div>
+            <button id="close-copilot-btn" class="copilot-close-btn">&times;</button>
+        </div>
+
+        <div id="copilot-messages" class="copilot-messages">
+            <div class="copilot-msg bot">
+                <div class="msg-bubble">
+                    <p>👋 Hello! I am your <strong>Retail Lakehouse AI Copilot</strong>.</p>
+                    <p>Ask me anything about revenue, 14-day ML forecasts, customer RFM segments, fraud alerts, or inventory stockouts!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="copilot-quick-pills">
+            <button type="button" class="copilot-pill" data-prompt="What is our Total Gross Revenue?">📊 Revenue</button>
+            <button type="button" class="copilot-pill" data-prompt="What is our 14-day sales forecast?">📈 Forecast</button>
+            <button type="button" class="copilot-pill" data-prompt="Are there any fraud alerts?">⚠️ Fraud</button>
+            <button type="button" class="copilot-pill" data-prompt="Show customer segments breakdown">👥 Customers</button>
+        </div>
+
+        <form id="copilot-form" class="copilot-input-bar">
+            <input type="text" id="copilot-input" placeholder="Ask AI Copilot..." required autocomplete="off">
+            <button type="submit" class="btn btn-primary" id="copilot-send-btn">
+                <i data-lucide="send"></i>
+            </button>
+        </form>
+    </div>
+
     <!-- Custom JS -->
-    <script src="app.js?v=banknote_fix"></script>
+    <script src="app.js?v=copilot_v1"></script>
 </body>
 </html>
