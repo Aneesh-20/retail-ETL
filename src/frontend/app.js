@@ -855,12 +855,12 @@ function downloadCSV(filename, csvContent) {
 // Utility formatting helpers
 function formatMoney(val) {
     if (val === undefined || val === null) return "0.00";
-    return Number(val).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return Number(val).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function formatCount(val) {
     if (val === undefined || val === null) return "0";
-    return Number(val).toLocaleString();
+    return Number(val).toLocaleString('en-IN');
 }
 
 function formatDate(val) {
