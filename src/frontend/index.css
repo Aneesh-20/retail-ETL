@@ -498,6 +498,53 @@ body {
     box-shadow: 1px 1px 0px #000000;
 }
 
+.modal-alert.error {
+    background-color: var(--crimson-main);
+    color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   NEOBRUTALIST TOAST NOTIFICATION & REFRESH ANIMATION
+   -------------------------------------------------------------------------- */
+.toast-notification {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background-color: #10b981;
+    color: #ffffff;
+    border: var(--stroke-thick);
+    border-radius: var(--radius-md);
+    box-shadow: 6px 6px 0px #000000;
+    padding: 14px 22px;
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 999999;
+    animation: toastPopIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+@keyframes toastPopIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.toast-notification.hidden {
+    display: none !important;
+}
+
+.spin-anim {
+    animation: spinRotate 0.8s linear infinite;
+}
+
+@keyframes spinRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
 .btn-primary {
     background-color: var(--crimson-main);
     color: #ffffff;
