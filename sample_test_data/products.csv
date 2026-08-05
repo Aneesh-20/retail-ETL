@@ -1,0 +1,6 @@
+product_id,sku,name,category,price,cost
+PRD-101,SKU-4001,Noise-Canceling Headphones,Electronics,299.99,140.00
+PRD-102,SKU-4002,UltraSlim Laptop 15in,Electronics,1200.00,850.00
+PRD-103,SKU-4003,Cotton Crewneck T-Shirt,Apparel,45.50,12.00
+PRD-104,SKU-4004,Organic Cold Brew Coffee,Grocery,85.00,35.00
+PRD-105,SKU-4005,Ergonomic Office Chair,Home & Living,150.00,75.00

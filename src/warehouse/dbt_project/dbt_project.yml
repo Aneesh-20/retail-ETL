@@ -1,0 +1,26 @@
+name: 'retail_lakehouse'
+version: '1.0.0'
+config-version: 2
+
+# This points to the profile in profiles.yml
+profile: 'retail_lakehouse'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  retail_lakehouse:
+    staging:
+      +materialized: view
+    intermediate:
+      +materialized: view
+    marts:
+      +materialized: table

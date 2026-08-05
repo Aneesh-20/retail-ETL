@@ -1,0 +1,12 @@
+retail_lakehouse:
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('DBT_HOST', 'localhost') }}"
+      user: "{{ env_var('DBT_USER', 'retail_user') }}"
+      pass: "{{ env_var('DBT_PASSWORD', 'retail_pass') }}"
+      port: {{ env_var('DBT_PORT', '5432') | int }}
+      dbname: "{{ env_var('DBT_DBNAME', 'retail_warehouse') }}"
+      schema: public
+      threads: 4
+  target: dev

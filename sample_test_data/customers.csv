@@ -1,0 +1,6 @@
+customer_id,first_name,last_name,email,signup_timestamp
+CUST-501,Alex,Morgan,alex.m@example.com,2026-01-10 08:00:00
+CUST-502,Samantha,Reed,samantha.r@example.com,2026-02-15 11:20:00
+CUST-503,Michael,Chen,michael.c@example.com,2026-03-01 14:05:00
+CUST-504,Emily,Davis,emily.d@example.com,2026-04-12 09:30:00
+CUST-505,David,Wilson,david.w@example.com,2026-05-20 16:15:00

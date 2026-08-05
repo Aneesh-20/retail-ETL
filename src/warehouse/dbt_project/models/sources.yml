@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: silver
+    schema: public
+    tables:
+      - name: silver_customers
+        description: "Standardized customer records from CRM"
+      - name: silver_products
+        description: "Standardized product catalog"
+      - name: silver_stores
+        description: "Store branch location directory"
+      - name: silver_transactions
+        description: "Consolidated, cleaned, and deduplicated retail transactions"
+      - name: silver_returns
+        description: "Customer product return logs"
+      - name: silver_inventory_movements
+        description: "Daily inventory updates, restocks, and sale reductions"
+      - name: silver_marketing_campaigns
+        description: "Marketing campaign daily cost, clicks, and impressions"
+      - name: silver_support_tickets
+        description: "Customer service cases"

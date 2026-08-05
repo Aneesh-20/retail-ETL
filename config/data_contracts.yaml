@@ -1,0 +1,122 @@
+# Data Contracts for Enterprise Retail Lakehouse (Silver Tier)
+version: "1.0"
+owner: "retail-data-platform-team"
+
+contracts:
+  customers:
+    source_system: "CRM"
+    ownership: "crm-team"
+    freshness_sla_hours: 24
+    columns:
+      id:
+        type: "string"
+        nullable: false
+        primary_key: true
+        pii: false
+      first_name:
+        type: "string"
+        nullable: false
+        pii: true
+      last_name:
+        type: "string"
+        nullable: false
+        pii: true
+      email:
+        type: "string"
+        nullable: false
+        pii: true
+        pattern: "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"
+      phone:
+        type: "string"
+        nullable: true
+        pii: true
+      gender:
+        type: "string"
+        nullable: false
+        accepted_values: ["M", "F", "OTHER", "UNKNOWN"]
+      state:
+        type: "string"
+        nullable: false
+        length: 2
+      birth_date:
+        type: "date"
+        nullable: true
+        pii: true
+
+  products:
+    source_system: "INVENTORY"
+    ownership: "merchandising-team"
+    freshness_sla_hours: 12
+    columns:
+      id:
+        type: "string"
+        nullable: false
+        primary_key: true
+        pii: false
+      sku:
+        type: "string"
+        nullable: false
+        pii: false
+      name:
+        type: "string"
+        nullable: false
+        pii: false
+      category:
+        type: "string"
+        nullable: false
+        accepted_values: ["Electronics", "Apparel", "Home & Kitchen", "Beauty", "Sports & Outdoors", "Grocery"]
+      price:
+        type: "decimal"
+        nullable: false
+        min_value: 0.0
+      cost:
+        type: "decimal"
+        nullable: false
+        min_value: 0.0
+
+  transactions:
+    source_system: "POS_WEB_APP"
+    ownership: "sales-engineering-team"
+    freshness_sla_hours: 1
+    columns:
+      id:
+        type: "string"
+        nullable: false
+        primary_key: true
+        pii: false
+      transaction_id:
+        type: "string"
+        nullable: false
+        pii: false
+      customer_id:
+        type: "string"
+        nullable: true
+        pii: false
+      store_id:
+        type: "string"
+        nullable: true
+        pii: false
+      channel:
+        type: "string"
+        nullable: false
+        accepted_values: ["POS", "WEBSITE", "MOBILE_APP"]
+      product_id:
+        type: "string"
+        nullable: false
+        pii: false
+      quantity:
+        type: "integer"
+        nullable: false
+        min_value: 1
+      unit_price:
+        type: "decimal"
+        nullable: false
+        min_value: 0.0
+      discount:
+        type: "decimal"
+        nullable: false
+        min_value: 0.0
+      transaction_timestamp:
+        type: "string"
+        nullable: false
+        pii: false
