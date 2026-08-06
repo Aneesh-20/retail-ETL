@@ -507,8 +507,42 @@ class SyntheticDataGenerator:
             FROM returns
         """)
 
+        # silver_inventory_movements
+        cursor.execute("DROP TABLE IF EXISTS silver_inventory_movements")
+        cursor.execute("""
+            CREATE TABLE silver_inventory_movements AS
+            SELECT id, product_id, store_id, movement_type, quantity, movement_timestamp
+            FROM inventory_movements
+        """)
+
+        # gold_inventory_risk
+        cursor.execute("DROP TABLE IF EXISTS gold_inventory_risk")
+        cursor.execute("""
+            CREATE TABLE gold_inventory_risk AS
+            SELECT 
+                s.name as store_name,
+                p.name as product_name,
+                ABS(RANDOM() % 45 + 5) as current_stock,
+                ROUND(ABS(RANDOM() % 10 + 2.5), 1) as avg_daily_sales,
+                ROUND(ABS(RANDOM() % 30 + 60.0), 1) as sell_through_pct,
+                ROUND(ABS(RANDOM() % 14 + 1.2), 1) as days_of_supply,
+                CASE 
+                    WHEN ABS(RANDOM() % 10) < 3 THEN 'High Risk'
+                    WHEN ABS(RANDOM() % 10) < 6 THEN 'Medium Risk'
+                    ELSE 'Low Risk'
+                END as risk_tier,
+                CASE 
+                    WHEN ABS(RANDOM() % 10) < 3 THEN 'Critical Restock Urgency'
+                    WHEN ABS(RANDOM() % 10) < 6 THEN 'Reorder within 5 days'
+                    ELSE 'Optimal Supply'
+                END as reorder_suggestion
+            FROM silver_products p
+            CROSS JOIN silver_stores s
+            LIMIT 15
+        """)
+
         self.conn.commit()
-        print("Silver tables synced successfully!")
+        print("Silver & Gold tables synced successfully!")
 
 def main():
     parser = argparse.ArgumentParser(description="Synthetic Retail Data Generator")

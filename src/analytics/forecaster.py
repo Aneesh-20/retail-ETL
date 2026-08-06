@@ -173,7 +173,7 @@ def run_sales_forecast():
             LEFT JOIN silver_products p ON t.product_id = p.id
         """
         sales_df = pd.read_sql(query, con=engine)
-        sales_df['date_day'] = pd.to_datetime(sales_df['date_day']).dt.date
+        sales_df['date_day'] = pd.to_datetime(sales_df['date_day'], format='mixed', errors='coerce').dt.date
         sales_df['net_sales'] = sales_df['net_sales'].astype(float)
         sales_df['channel'] = sales_df['channel'].fillna("POS")
         sales_df['category'] = sales_df['category'].fillna("General")

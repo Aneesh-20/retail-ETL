@@ -184,9 +184,10 @@ def get_trends(channel: Optional[str] = None, category: Optional[str] = None):
         except Exception:
             fc_df = pd.DataFrame(columns=['date_day', 'forecast', 'metrics_json'])
             
-        # Combine
-        combined = pd.merge(hist_sales, fc_df, on='date_day', how='outer')
-        combined = combined.sort_values('date_day').fillna(0).tail(20)
+        # Combine last 14 historical days + forecast days
+        hist_recent = hist_sales.sort_values('date_day').tail(14)
+        combined = pd.merge(hist_recent, fc_df, on='date_day', how='outer')
+        combined = combined.sort_values('date_day').fillna(0)
         
         # Extract metrics from forecast
         metrics = {"mae": 0.0, "rmse": 0.0, "wape": 0.0}

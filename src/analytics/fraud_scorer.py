@@ -46,7 +46,7 @@ def score_fraud():
 
     # Build customer aggregations for context
     # High return rates, duplicate behaviors, velocity check
-    tx_df['transaction_timestamp'] = pd.to_datetime(tx_df['transaction_timestamp'])
+    tx_df['transaction_timestamp'] = pd.to_datetime(tx_df['transaction_timestamp'], format='mixed', errors='coerce')
     
     # Calculate returns per customer
     ret_counts = ret_df.groupby('transaction_id')['quantity'].sum().reset_index()
