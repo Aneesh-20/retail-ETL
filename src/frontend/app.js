@@ -520,8 +520,8 @@ async function renderOverviewTab() {
     const ctxSales = document.getElementById('salesForecastChart').getContext('2d');
     const filteredTrends = filterTrendsByCustomDate(trendData.trends);
     const dates = filteredTrends.map(t => t.date_day);
-    const actuals = filteredTrends.map(t => t.actual || null);
-    const forecasts = filteredTrends.map(t => t.forecast || null);
+    const actuals = filteredTrends.map(t => (t.actual && Number(t.actual) > 0) ? Number(t.actual) : null);
+    const forecasts = filteredTrends.map(t => (t.forecast && Number(t.forecast) > 0) ? Number(t.forecast) : null);
 
     if (salesChart) salesChart.destroy();
     salesChart = new Chart(ctxSales, {
@@ -532,28 +532,30 @@ async function renderOverviewTab() {
                 {
                     label: `Actual Sales (${getCurrencySymbol()})`,
                     data: actuals,
-                    borderColor: '#dc2626',
-                    borderWidth: 4,
-                    backgroundColor: 'rgba(220, 38, 38, 0.15)',
-                    tension: 0,
+                    borderColor: '#4f46e5',
+                    borderWidth: 3,
+                    backgroundColor: 'rgba(79, 70, 229, 0.12)',
+                    tension: 0.3,
                     fill: true,
-                    pointBackgroundColor: '#dc2626',
-                    pointBorderColor: '#000000',
-                    pointBorderWidth: 3,
-                    pointRadius: 5
+                    spanGaps: true,
+                    pointBackgroundColor: '#4f46e5',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4
                 },
                 {
                     label: `Ridge Forecast (${getCurrencySymbol()})`,
                     data: forecasts,
-                    borderColor: '#0f172a',
-                    borderWidth: 4,
+                    borderColor: '#10b981',
+                    borderWidth: 3,
                     borderDash: [6, 4],
-                    tension: 0,
+                    tension: 0.3,
                     fill: false,
-                    pointBackgroundColor: '#0f172a',
-                    pointBorderColor: '#000000',
+                    spanGaps: true,
+                    pointBackgroundColor: '#10b981',
+                    pointBorderColor: '#ffffff',
                     pointBorderWidth: 2,
-                    pointRadius: 5
+                    pointRadius: 4
                 }
             ]
         },
@@ -632,8 +634,8 @@ async function renderTrendsTab() {
     const ctxSalesLarge = document.getElementById('salesTrendsChartLarge').getContext('2d');
     const filteredTrends = filterTrendsByCustomDate(trendData.trends);
     const dates = filteredTrends.map(t => t.date_day);
-    const actuals = filteredTrends.map(t => t.actual || null);
-    const forecasts = filteredTrends.map(t => t.forecast || null);
+    const actuals = filteredTrends.map(t => (t.actual && Number(t.actual) > 0) ? Number(t.actual) : null);
+    const forecasts = filteredTrends.map(t => (t.forecast && Number(t.forecast) > 0) ? Number(t.forecast) : null);
 
     if (salesChartLarge) salesChartLarge.destroy();
     salesChartLarge = new Chart(ctxSalesLarge, {
@@ -644,28 +646,30 @@ async function renderTrendsTab() {
                 {
                     label: `Actual Revenue (${getCurrencySymbol()})`,
                     data: actuals,
-                    borderColor: '#dc2626',
-                    borderWidth: 4,
-                    backgroundColor: 'rgba(220, 38, 38, 0.15)',
-                    tension: 0,
+                    borderColor: '#4f46e5',
+                    borderWidth: 3,
+                    backgroundColor: 'rgba(79, 70, 229, 0.12)',
+                    tension: 0.3,
                     fill: true,
-                    pointBackgroundColor: '#dc2626',
-                    pointBorderColor: '#000000',
-                    pointBorderWidth: 3,
-                    pointRadius: 6
+                    spanGaps: true,
+                    pointBackgroundColor: '#4f46e5',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5
                 },
                 {
                     label: `Ridge Multi-Forecast (${getCurrencySymbol()})`,
                     data: forecasts,
-                    borderColor: '#ff2a85',
-                    borderWidth: 4,
+                    borderColor: '#10b981',
+                    borderWidth: 3,
                     borderDash: [6, 4],
-                    tension: 0,
+                    tension: 0.3,
                     fill: false,
-                    pointBackgroundColor: '#ff2a85',
-                    pointBorderColor: '#000000',
-                    pointBorderWidth: 3,
-                    pointRadius: 6
+                    spanGaps: true,
+                    pointBackgroundColor: '#10b981',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5
                 }
             ]
         },
