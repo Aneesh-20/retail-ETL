@@ -160,6 +160,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize AI Copilot
     initCopilot();
 
+    // Transform filter dropdowns into Custom Light Enterprise Dropdowns
+    setupCustomSelects();
+
     // Setup Modal Events
     if (openUploadModalBtn) {
         openUploadModalBtn.addEventListener('click', () => openUploadModal('file-upload'));
@@ -977,6 +980,79 @@ function showToast(msg = "System Refreshed Successfully! Lakehouse analytics upd
             toast.classList.add('hidden');
         }, 3200);
     }
+}
+
+// Custom Light Enterprise Dropdown Component Transformer
+function setupCustomSelects() {
+    const selectElements = document.querySelectorAll('.filter-bar select');
+    
+    selectElements.forEach(select => {
+        if (select.dataset.customized === 'true') return;
+        select.dataset.customized = 'true';
+        
+        select.style.display = 'none';
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'custom-select-wrapper';
+
+        const trigger = document.createElement('div');
+        trigger.className = 'custom-select-trigger';
+        
+        const selectedOption = select.options[select.selectedIndex] || select.options[0];
+        trigger.innerHTML = `<span>${selectedOption ? selectedOption.text : ''}</span><i data-lucide="chevron-down" class="icon-sm"></i>`;
+
+        const optionsCard = document.createElement('div');
+        optionsCard.className = 'custom-select-options';
+
+        Array.from(select.options).forEach(opt => {
+            const optDiv = document.createElement('div');
+            optDiv.className = `custom-option ${opt.selected ? 'selected' : ''}`;
+            optDiv.dataset.value = opt.value;
+            optDiv.innerHTML = `<span>${opt.text}</span>${opt.selected ? '<i data-lucide="check" class="icon-sm"></i>' : ''}`;
+
+            optDiv.addEventListener('click', (e) => {
+                e.stopPropagation();
+                select.value = opt.value;
+                
+                trigger.querySelector('span').innerText = opt.text;
+                
+                optionsCard.querySelectorAll('.custom-option').forEach(o => {
+                    o.classList.remove('selected');
+                    const icon = o.querySelector('i');
+                    if (icon) icon.remove();
+                });
+                optDiv.classList.add('selected');
+                optDiv.insertAdjacentHTML('beforeend', '<i data-lucide="check" class="icon-sm"></i>');
+                
+                wrapper.classList.remove('open');
+
+                select.dispatchEvent(new Event('change', { bubbles: true }));
+                
+                if (window.lucide) lucide.createIcons();
+            });
+
+            optionsCard.appendChild(optDiv);
+        });
+
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.querySelectorAll('.custom-select-wrapper.open').forEach(w => {
+                if (w !== wrapper) w.classList.remove('open');
+            });
+            wrapper.classList.toggle('open');
+            if (window.lucide) lucide.createIcons();
+        });
+
+        wrapper.appendChild(trigger);
+        wrapper.appendChild(optionsCard);
+        select.parentNode.appendChild(wrapper);
+    });
+
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.custom-select-wrapper.open').forEach(w => {
+            w.classList.remove('open');
+        });
+    });
 }
 
 // AI Retail Copilot Drawer & Query Engine
