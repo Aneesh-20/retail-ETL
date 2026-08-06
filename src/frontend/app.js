@@ -160,6 +160,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize AI Copilot
     initCopilot();
 
+    // Initialize DAG Pipeline Controls
+    initDagPipeline();
+
     // Transform filter dropdowns into Custom Light Enterprise Dropdowns
     setupCustomSelects();
 
@@ -271,6 +274,8 @@ async function loadCurrentTabData(forceRefresh = false) {
             tabPromise = renderFraudTab();
         } else if (activeTab === "quality") {
             tabPromise = renderQualityTab();
+        } else if (activeTab === "dag-pipeline") {
+            tabPromise = renderDagPipelineTab();
         }
 
         // Fetch KPIs and Tab Data concurrently in parallel!
@@ -1053,6 +1058,117 @@ function setupCustomSelects() {
             w.classList.remove('open');
         });
     });
+}
+
+// --------------------------------------------------------------------------
+// AUTOMATED ETL PIPELINE SCHEDULE & DAG VISUALIZER LOGIC
+// --------------------------------------------------------------------------
+let dagRunCounter = 9825;
+
+function initDagPipeline() {
+    const triggerBtn = document.getElementById('trigger-dag-btn');
+    const scheduleSelect = document.getElementById('dag-schedule-select');
+
+    if (scheduleSelect) {
+        scheduleSelect.addEventListener('change', (e) => {
+            const val = e.target.value;
+            const labels = {
+                hourly: "⏱️ Schedule set to HOURLY SYNC (Autopilot)",
+                realtime: "⚡ Schedule set to REAL-TIME STREAMING",
+                daily: "📅 Schedule set to DAILY MIDNIGHT BATCH",
+                paused: "⏸️ Pipeline PAUSED (Manual Triggers Only)"
+            };
+            showToast(labels[val] || "Schedule updated");
+        });
+    }
+
+    if (triggerBtn) {
+        triggerBtn.addEventListener('click', runDagPipelineSimulation);
+    }
+
+    // Node click inspector
+    const dagNodes = document.querySelectorAll('.dag-node');
+    dagNodes.forEach(node => {
+        node.addEventListener('click', () => {
+            const name = node.querySelector('.dag-node-title')?.innerText || "Node";
+            const rows = node.querySelector('.node-rows')?.innerText || "N/A";
+            const latency = node.querySelector('.node-latency')?.innerText || "N/A";
+            showToast(`Node ${name}: ${rows} records processed in ${latency}. Data Contracts Verified 100%.`);
+        });
+    });
+}
+
+async function runDagPipelineSimulation() {
+    const triggerBtn = document.getElementById('trigger-dag-btn');
+    const nodes = document.querySelectorAll('.dag-node');
+    const runtimeEl = document.getElementById('dag-total-runtime');
+    const recordsEl = document.getElementById('dag-records-count');
+    const lastSyncEl = document.getElementById('dag-last-sync');
+    const historyTbody = document.getElementById('dag-history-tbody');
+
+    if (triggerBtn) {
+        triggerBtn.disabled = true;
+        triggerBtn.innerHTML = `<i data-lucide="loader-2" class="spin-anim"></i> EXECUTING DAG...`;
+        if (window.lucide) lucide.createIcons();
+    }
+
+    showToast("🚀 Triggering Automated DAG Pipeline Execution...");
+
+    let totalLatency = 0;
+    const latencies = [85, 45, 110, 90, 60, 30];
+
+    for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i];
+        const badge = node.querySelector('.node-badge');
+        
+        node.classList.add('active-run');
+        if (badge) {
+            badge.className = 'node-badge running';
+            badge.innerText = '🔵 RUNNING';
+        }
+
+        await new Promise(r => setTimeout(r, 380));
+
+        totalLatency += latencies[i];
+        
+        if (badge) {
+            badge.className = 'node-badge success';
+            badge.innerText = '🟢 SUCCESS';
+        }
+        node.classList.remove('active-run');
+    }
+
+    const newRecords = 45000 + Math.floor(Math.random() * 2000);
+    if (runtimeEl) runtimeEl.innerText = `${totalLatency} ms`;
+    if (recordsEl) recordsEl.innerText = newRecords.toLocaleString('en-IN');
+    if (lastSyncEl) lastSyncEl.innerText = "Just Now";
+
+    if (historyTbody) {
+        const newRunId = `#RUN-${dagRunCounter++}`;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><code>${newRunId}</code></td>
+            <td><span class="badge blue">MANUAL TRIGGER</span></td>
+            <td>Autopilot Sync</td>
+            <td>6 / 6 Nodes</td>
+            <td>${newRecords.toLocaleString('en-IN')}</td>
+            <td>${totalLatency} ms</td>
+            <td><span class="badge green">🟢 SUCCESS</span></td>
+        `;
+        historyTbody.insertBefore(tr, historyTbody.firstChild);
+    }
+
+    if (triggerBtn) {
+        triggerBtn.disabled = false;
+        triggerBtn.innerHTML = `<i data-lucide="play-circle"></i> RUN PIPELINE NOW`;
+        if (window.lucide) lucide.createIcons();
+    }
+
+    showToast(`🟢 DAG Execution Completed! Medallion pipeline synced ${newRecords.toLocaleString('en-IN')} records in ${totalLatency}ms.`);
+}
+
+async function renderDagPipelineTab() {
+    if (window.lucide) lucide.createIcons();
 }
 
 // AI Retail Copilot Drawer & Query Engine

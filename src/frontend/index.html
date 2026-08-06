@@ -13,7 +13,7 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="index.css?v=custom_dropdown_v1">
+    <link rel="stylesheet" href="index.css?v=dag_pipeline_v1">
 </head>
 <body>
     <!-- 2-Second Neobrutalist Splash Screen -->
@@ -55,6 +55,9 @@
                 </button>
                 <button class="nav-item" data-tab="quality">
                     <i data-lucide="database-backup"></i> Pipeline Health
+                </button>
+                <button class="nav-item" data-tab="dag-pipeline">
+                    <i data-lucide="git-merge"></i> ETL & DAG Pipeline
                 </button>
             </nav>
             <div class="sidebar-footer">
@@ -474,6 +477,258 @@
                     </div>
                 </div>
             </section>
+
+            <!-- TAB 7: Automated ETL Pipeline Schedule & DAG Visualizer -->
+            <section id="tab-dag-pipeline" class="tab-panel">
+                <!-- Control Toolbar & KPI Cards -->
+                <div class="card col-full dag-toolbar-card">
+                    <div class="dag-toolbar-left">
+                        <div class="dag-status-pill online">
+                            <span class="status-dot"></span>
+                            <span>PIPELINE HEALTHY (0 FAILURES)</span>
+                        </div>
+                        <div class="dag-schedule-box">
+                            <label><i data-lucide="clock" class="icon-sm"></i> SCHEDULE:</label>
+                            <select id="dag-schedule-select" class="dag-select">
+                                <option value="hourly">⏱️ HOURLY SYNC (AUTOPILOT)</option>
+                                <option value="realtime">⚡ REAL-TIME STREAMING</option>
+                                <option value="daily">📅 DAILY MIDNIGHT BATCH</option>
+                                <option value="paused">⏸️ PAUSED (MANUAL ONLY)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="dag-toolbar-right">
+                        <button id="trigger-dag-btn" class="btn btn-primary btn-lg">
+                            <i data-lucide="play-circle"></i> RUN PIPELINE NOW
+                        </button>
+                    </div>
+                </div>
+
+                <div class="kpi-strip">
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-title">TOTAL PIPELINE RUNTIME</span>
+                            <i data-lucide="timer" class="kpi-icon"></i>
+                        </div>
+                        <div class="kpi-value" id="dag-total-runtime">420 ms</div>
+                        <div class="kpi-desc">Sub-second Medallion pipeline execution</div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-title">RECORDS PROCESSED</span>
+                            <i data-lucide="layers" class="kpi-icon"></i>
+                        </div>
+                        <div class="kpi-value" id="dag-records-count">45,280</div>
+                        <div class="kpi-desc">Across Bronze, Silver & Gold layers</div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-title">NODES SUCCESS RATE</span>
+                            <i data-lucide="check-check" class="kpi-icon"></i>
+                        </div>
+                        <div class="kpi-value">100%</div>
+                        <div class="kpi-desc">6 of 6 Pipeline Nodes Passed</div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-title">LAST SYNC TIME</span>
+                            <i data-lucide="calendar-check" class="kpi-icon"></i>
+                        </div>
+                        <div class="kpi-value" id="dag-last-sync">Just Now</div>
+                        <div class="kpi-desc">Automated Lakehouse trigger</div>
+                    </div>
+                </div>
+
+                <!-- DAG Visual Flow Container -->
+                <div class="card col-full">
+                    <div class="card-header">
+                        <div>
+                            <h3>Directed Acyclic Graph (DAG) Pipeline Orchestration</h3>
+                            <p class="subtitle">Real-time data contracts, transformation code execution, and throughput metrics</p>
+                        </div>
+                        <span class="badge blue">MEDALLION ARCHITECTURE</span>
+                    </div>
+
+                    <div class="dag-flow-container">
+                        <!-- Node 1 -->
+                        <div class="dag-node" data-node="bronze">
+                            <div class="dag-node-header">
+                                <span class="node-step">STEP 01</span>
+                                <span class="node-badge success">🟢 SUCCESS</span>
+                            </div>
+                            <div class="dag-node-icon bronze">
+                                <i data-lucide="hard-drive"></i>
+                            </div>
+                            <h4 class="dag-node-title">BRONZE INGESTION</h4>
+                            <p class="dag-node-sub">Raw POS, E-commerce & Logs</p>
+                            <div class="dag-node-metrics">
+                                <span><strong>Rows:</strong> <span class="node-rows">12,450</span></span>
+                                <span><strong>Latency:</strong> <span class="node-latency">85ms</span></span>
+                            </div>
+                        </div>
+
+                        <div class="dag-arrow">
+                            <i data-lucide="chevron-right"></i>
+                        </div>
+
+                        <!-- Node 2 -->
+                        <div class="dag-node" data-node="schema">
+                            <div class="dag-node-header">
+                                <span class="node-step">STEP 02</span>
+                                <span class="node-badge success">🟢 SUCCESS</span>
+                            </div>
+                            <div class="dag-node-icon schema">
+                                <i data-lucide="shield-check"></i>
+                            </div>
+                            <h4 class="dag-node-title">SCHEMA CHECK</h4>
+                            <p class="dag-node-sub">Type & Contract Enforcement</p>
+                            <div class="dag-node-metrics">
+                                <span><strong>Rows:</strong> <span class="node-rows">12,450</span></span>
+                                <span><strong>Latency:</strong> <span class="node-latency">45ms</span></span>
+                            </div>
+                        </div>
+
+                        <div class="dag-arrow">
+                            <i data-lucide="chevron-right"></i>
+                        </div>
+
+                        <!-- Node 3 -->
+                        <div class="dag-node" data-node="silver">
+                            <div class="dag-node-header">
+                                <span class="node-step">STEP 03</span>
+                                <span class="node-badge success">🟢 SUCCESS</span>
+                            </div>
+                            <div class="dag-node-icon silver">
+                                <i data-lucide="sparkles"></i>
+                            </div>
+                            <h4 class="dag-node-title">SILVER CLEANSE</h4>
+                            <p class="dag-node-sub">Deduplication & Null Handler</p>
+                            <div class="dag-node-metrics">
+                                <span><strong>Rows:</strong> <span class="node-rows">12,210</span></span>
+                                <span><strong>Latency:</strong> <span class="node-latency">110ms</span></span>
+                            </div>
+                        </div>
+
+                        <div class="dag-arrow">
+                            <i data-lucide="chevron-right"></i>
+                        </div>
+
+                        <!-- Node 4 -->
+                        <div class="dag-node" data-node="gold">
+                            <div class="dag-node-header">
+                                <span class="node-step">STEP 04</span>
+                                <span class="node-badge success">🟢 SUCCESS</span>
+                            </div>
+                            <div class="dag-node-icon gold">
+                                <i data-lucide="database"></i>
+                            </div>
+                            <h4 class="dag-node-title">GOLD AGGREGATIONS</h4>
+                            <p class="dag-node-sub">RFM & Fraud Risk Engine</p>
+                            <div class="dag-node-metrics">
+                                <span><strong>Rows:</strong> <span class="node-rows">795</span></span>
+                                <span><strong>Latency:</strong> <span class="node-latency">90ms</span></span>
+                            </div>
+                        </div>
+
+                        <div class="dag-arrow">
+                            <i data-lucide="chevron-right"></i>
+                        </div>
+
+                        <!-- Node 5 -->
+                        <div class="dag-node" data-node="ml">
+                            <div class="dag-node-header">
+                                <span class="node-step">STEP 05</span>
+                                <span class="node-badge success">🟢 SUCCESS</span>
+                            </div>
+                            <div class="dag-node-icon ml">
+                                <i data-lucide="cpu"></i>
+                            </div>
+                            <h4 class="dag-node-title">ML DEMAND MODEL</h4>
+                            <p class="dag-node-sub">Ridge ML 30-Day Forecaster</p>
+                            <div class="dag-node-metrics">
+                                <span><strong>Rows:</strong> <span class="node-rows">30</span></span>
+                                <span><strong>Latency:</strong> <span class="node-latency">60ms</span></span>
+                            </div>
+                        </div>
+
+                        <div class="dag-arrow">
+                            <i data-lucide="chevron-right"></i>
+                        </div>
+
+                        <!-- Node 6 -->
+                        <div class="dag-node" data-node="serving">
+                            <div class="dag-node-header">
+                                <span class="node-step">STEP 06</span>
+                                <span class="node-badge success">🟢 SUCCESS</span>
+                            </div>
+                            <div class="dag-node-icon serving">
+                                <i data-lucide="rocket"></i>
+                            </div>
+                            <h4 class="dag-node-title">DASHBOARD SERVING</h4>
+                            <p class="dag-node-sub">Cache Push & Frontend Sync</p>
+                            <div class="dag-node-metrics">
+                                <span><strong>Status:</strong> <span class="node-rows">Live</span></span>
+                                <span><strong>Latency:</strong> <span class="node-latency">30ms</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Execution History Table -->
+                <div class="card col-full">
+                    <div class="card-header">
+                        <h3>Pipeline Execution Logs & History</h3>
+                        <span class="subtitle">Latest automated and manual DAG trigger runs</span>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Run ID</th>
+                                    <th>Trigger Type</th>
+                                    <th>Pipeline Schedule</th>
+                                    <th>Nodes Passed</th>
+                                    <th>Records Processed</th>
+                                    <th>Execution Time</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dag-history-tbody">
+                                <tr>
+                                    <td><code>#RUN-9824</code></td>
+                                    <td><span class="badge blue">MANUAL TRIGGER</span></td>
+                                    <td>Autopilot Sync</td>
+                                    <td>6 / 6 Nodes</td>
+                                    <td>45,280</td>
+                                    <td>420 ms</td>
+                                    <td><span class="badge green">🟢 SUCCESS</span></td>
+                                </tr>
+                                <tr>
+                                    <td><code>#RUN-9823</code></td>
+                                    <td><span class="badge orange">HOURLY BATCH</span></td>
+                                    <td>Autopilot Sync</td>
+                                    <td>6 / 6 Nodes</td>
+                                    <td>44,120</td>
+                                    <td>395 ms</td>
+                                    <td><span class="badge green">🟢 SUCCESS</span></td>
+                                </tr>
+                                <tr>
+                                    <td><code>#RUN-9822</code></td>
+                                    <td><span class="badge orange">HOURLY BATCH</span></td>
+                                    <td>Autopilot Sync</td>
+                                    <td>6 / 6 Nodes</td>
+                                    <td>43,890</td>
+                                    <td>410 ms</td>
+                                    <td><span class="badge green">🟢 SUCCESS</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -651,6 +906,6 @@
     </div>
 
     <!-- Custom JS -->
-    <script src="app.js?v=custom_dropdown_v1"></script>
+    <script src="app.js?v=dag_pipeline_v1"></script>
 </body>
 </html>
