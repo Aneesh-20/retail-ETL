@@ -13,7 +13,7 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="index.css?v=dpdp_privacy_v1">
+    <link rel="stylesheet" href="index.css?v=dpdp_popup_v1">
 </head>
 <body>
     <!-- 2-Second Neobrutalist Splash Screen -->
@@ -1017,6 +1017,61 @@
     </div>
 
     <!-- Custom JS -->
-    <script src="app.js?v=dpdp_privacy_v1"></script>
+    <script src="app.js?v=dpdp_popup_v1"></script>
+
+    <!-- DPDP Act 2023 Explicit Privacy Policy & Consent Modal -->
+    <div id="dpdp-consent-modal" class="modal-backdrop hidden" style="z-index: 10000; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(8px);">
+        <div class="modal-card" style="max-width: 640px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 24px 48px -12px rgba(15, 23, 42, 0.25); background: #ffffff; padding: 28px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px; margin-bottom: 20px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #3730a3, #4f46e5); display: flex; align-items: center; justify-content: center; color: #ffffff;">
+                        <i data-lucide="shield-check" style="width: 24px; height: 24px;"></i>
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #0f172a;">Digital Personal Data Protection (DPDP) Privacy Notice</h3>
+                        <span class="badge blue" style="margin-top: 4px;">India DPDP Act 2023 Section 6 Mandate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="font-size: 13.5px; color: #475569; line-height: 1.6; margin-bottom: 20px;">
+                <p style="margin-bottom: 12px;">
+                    Welcome to the <strong>Enterprise Retail Lakehouse Platform</strong>. Under India's <strong>Digital Personal Data Protection Act, 2023</strong>, we process your personal data (name, email, order metrics) strictly based on explicit consent for legitimate fulfillment and analytics purposes.
+                </p>
+
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+                    <h4 style="margin: 0 0 8px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: #1e293b;">Data Processing Purposes:</h4>
+                    <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" id="dpdp-cb-fulfillment" checked disabled style="accent-color: #4f46e5; width: 16px; height: 16px;">
+                            <span><strong>Essential Order Fulfillment & Invoice Audit</strong> (Mandatory)</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" id="dpdp-cb-analytics" checked style="accent-color: #4f46e5; width: 16px; height: 16px;">
+                            <span><strong>Ridge ML Demand Forecasting & Inventory Optimization</strong></span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" id="dpdp-cb-fraud" checked style="accent-color: #4f46e5; width: 16px; height: 16px;">
+                            <span><strong>Explainable Fraud Detection & Anomaly Prevention</strong></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #64748b;">
+                    <span><strong>Data Fiduciary:</strong> Enterprise Data Office</span>
+                    <span><strong>Retention SLA:</strong> 180 Days</span>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; justify-content: flex-end; pt: 16px; border-top: 1px solid #f1f5f9;">
+                <button class="btn btn-secondary" id="dpdp-decline-btn" style="padding: 10px 16px; font-weight: 600;">
+                    DECLINE & ANONYMIZE
+                </button>
+                <button class="btn btn-primary" id="dpdp-accept-btn" style="padding: 10px 20px; font-weight: 700; background: linear-gradient(135deg, #3730a3, #4f46e5); color: #ffffff; border: none; border-radius: 8px;">
+                    ACCEPT & PROCEED
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

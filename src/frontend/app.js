@@ -160,6 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize AI Copilot
     initCopilot();
     initPrivacyEvents();
+    checkAndShowDpdpModal();
 
     // Initialize DAG Pipeline Controls
     initDagPipeline();
