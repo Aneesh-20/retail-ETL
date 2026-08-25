@@ -159,6 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initialize AI Copilot
     initCopilot();
+    initPrivacyEvents();
 
     // Initialize DAG Pipeline Controls
     initDagPipeline();
@@ -276,6 +277,8 @@ async function loadCurrentTabData(forceRefresh = false) {
             tabPromise = renderQualityTab();
         } else if (activeTab === "dag-pipeline") {
             tabPromise = renderDagPipelineTab();
+        } else if (activeTab === "privacy") {
+            tabPromise = renderPrivacyTab();
         }
 
         // Fetch KPIs and Tab Data concurrently in parallel!
@@ -1288,5 +1291,74 @@ function initCopilot() {
         messagesContainer.appendChild(msgDiv);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
         return msgDiv;
+    }
+}
+
+
+// DPDP ACT 2023 PRIVACY & PII RIGHTS LOGIC
+function initPrivacyEvents() {
+    const erasureBtn = document.getElementById('submit-erasure-btn');
+    const auditBtn = document.getElementById('trigger-privacy-audit-btn');
+
+    if (erasureBtn) {
+        erasureBtn.addEventListener('click', triggerRightToErasure);
+    }
+    if (auditBtn) {
+        auditBtn.addEventListener('click', () => {
+            showToast('🔍 Running DPDP Act Compliance Audit...');
+            renderPrivacyTab();
+        });
+    }
+}
+
+async function triggerRightToErasure() {
+    const input = document.getElementById('erasure-target-input');
+    const target = input ? input.value.trim() : '';
+
+    if (!target) {
+        showToast('⚠️ Please enter a valid Customer ID or Email to execute erasure.');
+        return;
+    }
+
+    showToast('⏳ Executing DPDP Right to Erasure...');
+
+    try {
+        const res = await apiPost('/privacy/erasure', { customer_id: target.startsWith('CUST-') ? target : null, email: target.includes('@') ? target : null });
+        showToast('🟢 ' + res.message);
+        if (input) input.value = '';
+        renderPrivacyTab();
+    } catch (err) {
+        showToast('⚠️ Failed to execute erasure: ' + err.message);
+    }
+}
+
+async function renderPrivacyTab() {
+    try {
+        const auditData = await apiGet('/privacy/audit');
+        const tbody = document.getElementById('privacy-audit-tbody');
+        if (!tbody) return;
+
+        tbody.innerHTML = '';
+        const samples = auditData.pii_samples || [];
+
+        if (samples.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #64748b; padding: 20px;">No customer PII records found.</td></tr>';
+            return;
+        }
+
+        samples.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = '<td><code>' + item.customer_id + '</code></td>' +
+                '<td><div style="font-weight: 600; color: #0f172a;">' + item.masked_name + '</div><div style="font-size: 11px; color: #94a3b8; text-decoration: line-through;">' + item.raw_name + '</div></td>' +
+                '<td><div style="font-weight: 600; color: #4f46e5;">' + item.masked_email + '</div><div style="font-size: 11px; color: #94a3b8; text-decoration: line-through;">' + item.raw_email + '</div></td>' +
+                '<td><div style="font-weight: 600; color: #0284c7;">' + item.masked_phone + '</div><div style="font-size: 11px; color: #94a3b8; text-decoration: line-through;">' + item.raw_phone + '</div></td>' +
+                '<td><span class="badge blue">' + item.consent_purpose + '</span></td>' +
+                '<td><span class="badge green">🟢 ' + item.dpdp_status + '</span></td>';
+            tbody.appendChild(tr);
+        });
+
+        if (window.lucide) lucide.createIcons();
+    } catch (err) {
+        console.error('Privacy audit fetch error:', err);
     }
 }

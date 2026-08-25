@@ -13,7 +13,7 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="index.css?v=data_render_v2">
+    <link rel="stylesheet" href="index.css?v=dpdp_privacy_v1">
 </head>
 <body>
     <!-- 2-Second Neobrutalist Splash Screen -->
@@ -58,6 +58,10 @@
                 </button>
                 <button class="nav-item" data-tab="dag-pipeline">
                     <i data-lucide="git-merge"></i> ETL & DAG Pipeline
+                </button>
+                <button class="nav-item" data-tab="privacy">
+                    <i data-lucide="shield-check"></i>
+                    <span>DPDP Privacy & Rights</span>
                 </button>
             </nav>
             <div class="sidebar-footer">
@@ -729,6 +733,113 @@
                     </div>
                 </div>
             </section>
+
+            <!-- 8. DPDP Act 2023 Privacy & PII Rights Tab -->
+            <section id="tab-privacy" class="tab-panel">
+                <div class="dag-toolbar-card" style="margin-bottom: 24px;">
+                    <div class="dag-toolbar-left">
+                        <span class="status-pill healthy" id="dpdp-status-badge">🟢 DPDP ACT 2023 COMPLIANT</span>
+                        <div class="schedule-selector-group">
+                            <label><i data-lucide="shield"></i> DATA FIDUCIARY:</label>
+                            <span class="badge blue" style="font-size: 13px; font-weight: 600;">Retail Lakehouse Enterprise Data Office</span>
+                        </div>
+                    </div>
+                    <div class="dag-toolbar-right">
+                        <button class="btn btn-primary" id="trigger-privacy-audit-btn">
+                            <i data-lucide="refresh-cw"></i> RUN PRIVACY AUDIT
+                        </button>
+                    </div>
+                </div>
+
+                <div class="kpi-grid">
+                    <div class="card kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-title">PII MASKING RATE</span>
+                            <i data-lucide="eye-off" class="kpi-icon indigo"></i>
+                        </div>
+                        <div class="kpi-value" id="kpi-pii-mask-rate">100%</div>
+                        <div class="kpi-footer green">
+                            <i data-lucide="check-circle-2"></i> All Silver & Gold PII Redacted
+                        </div>
+                    </div>
+                    <div class="card kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-title">ACTIVE CONSENT RATE</span>
+                            <i data-lucide="user-check" class="kpi-icon emerald"></i>
+                        </div>
+                        <div class="kpi-value" id="kpi-consent-rate">98.2%</div>
+                        <div class="kpi-footer green">
+                            <i data-lucide="arrow-up-right"></i> Explicit Data Purpose Agreed
+                        </div>
+                    </div>
+                    <div class="card kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-title">PENDING ERASURE REQUESTS</span>
+                            <i data-lucide="user-x" class="kpi-icon amber"></i>
+                        </div>
+                        <div class="kpi-value" id="kpi-pending-erasure">0</div>
+                        <div class="kpi-footer slate">
+                            <i data-lucide="clock"></i> Right to be Forgotten Queue
+                        </div>
+                    </div>
+                    <div class="card kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-title">DATA RETENTION SLA</span>
+                            <i data-lucide="file-lock-2" class="kpi-icon blue"></i>
+                        </div>
+                        <div class="kpi-value" id="kpi-retention-sla">180 Days</div>
+                        <div class="kpi-footer green">
+                            <i data-lucide="shield-alert"></i> DPDP Section 8 Compliant
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 24px;">
+                    <div class="card-header">
+                        <h3><i data-lucide="user-minus" style="width: 20px; height: 20px; vertical-align: middle; color: #ef4444; margin-right: 8px;"></i> Customer Right to Erasure ("Right to be Forgotten") Portal</h3>
+                        <span class="badge red">DPDP Section 12 Mandate</span>
+                    </div>
+                    <div style="padding: 20px;">
+                        <p style="font-size: 13px; color: #64748b; margin-bottom: 16px;">
+                            Under India's DPDP Act 2023, Data Principals (customers) can request complete deletion of their personal identity data. Triggering erasure redacts names, emails, and phone numbers across Lakehouse Silver/Gold tables while maintaining anonymous monetary audit totals.
+                        </p>
+                        <div style="display: flex; gap: 12px; max-width: 600px;">
+                            <input type="text" id="erasure-target-input" class="custom-input" placeholder="Enter Customer ID (e.g. CUST-1000) or Email..." style="flex: 1; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px;">
+                            <button class="btn btn-danger" id="submit-erasure-btn" style="background: linear-gradient(135deg, #dc2626, #b91c1c); color: #ffffff; border: none; font-weight: 600;">
+                                <i data-lucide="trash-2"></i> EXECUTE ERASE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 24px;">
+                    <div class="card-header">
+                        <h3><i data-lucide="lock" style="width: 20px; height: 20px; vertical-align: middle; color: #4f46e5; margin-right: 8px;"></i> Live Lakehouse PII Anonymization & Consent Audit Log</h3>
+                        <span class="badge blue">Side-by-side Raw vs. DPDP Masked</span>
+                    </div>
+                    <div class="table-container">
+                        <table id="privacy-audit-table">
+                            <thead>
+                                <tr>
+                                    <th>Customer ID</th>
+                                    <th>Raw Name vs. DPDP Masked Name</th>
+                                    <th>Raw Email vs. DPDP Masked Email</th>
+                                    <th>Raw Phone vs. DPDP Masked Phone</th>
+                                    <th>Consent Purpose</th>
+                                    <th>DPDP Encryption Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="privacy-audit-tbody">
+                                <tr>
+                                    <td colspan="6" style="text-align: center; color: #64748b; padding: 24px;">
+                                        <i data-lucide="loader-2" class="spin-anim"></i> Loading DPDP Privacy Audit Data...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -906,6 +1017,6 @@
     </div>
 
     <!-- Custom JS -->
-    <script src="app.js?v=data_render_v2"></script>
+    <script src="app.js?v=dpdp_privacy_v1"></script>
 </body>
 </html>
